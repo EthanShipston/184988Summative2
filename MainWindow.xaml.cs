@@ -1,4 +1,4 @@
-﻿/*Ethan Shipston
+/*Ethan Shipston
  * DATE
  * Program which reads a text files info and is capable of updating said info.
  */
@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace _184988Summative2
 {
@@ -38,33 +39,39 @@ namespace _184988Summative2
                 + "\n" + contact.email;
         }
 
-        private void btnSetInfo_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btnGetAge_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateTime = new DateTime();
-            dateTime = DateTime.Now;
-            string temp = dateTime.Date.ToString();
-            int.TryParse(temp.Substring(0, temp.IndexOf("/")), out int tempMonth);
-            temp = temp.Remove(0, temp.IndexOf("/") + 1);
-            int.TryParse(temp.Substring(0, temp.IndexOf("/")), out int tempDay);
-            temp = temp.Remove(0, temp.IndexOf("/") + 1);
-            int.TryParse(temp.Substring(0, temp.IndexOf(" ")), out int tempYear);
+            
+        }
 
-            int age = tempYear - contact.yearBorn;
-            if (tempMonth < contact.monthBorn)
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            string temp = txtInOut.Text;
+
+            string f = temp.Substring(0, temp.IndexOf("\n"));
+            temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+            string l = temp.Substring(0, temp.IndexOf("\n"));
+            temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+
+            int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int d);
+            temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+            int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int m);
+            temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+            int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int y);
+            temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+
+            string email = temp.Substring(0, temp.Length);
+
+            try
             {
-                age = age - 1;
+                DateTime dt = new DateTime(y, m, d);
+                contact.WriteToFile(f, l, dt, email);
             }
-            else if (tempDay < contact.monthBorn)
+            catch(Exception ex) 
             {
-                age = age - 1;
+                MessageBox.Show(ex.Message);
             }
 
-            MessageBox.Show(age.ToString() + " years old.");
         }
     }
 }
