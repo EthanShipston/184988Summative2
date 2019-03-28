@@ -11,5 +11,6 @@
         <Label Content="Change info as appropriate. Date in D/M/Y format"/>
         <TextBox x:Name="txtInOut"/>
         <Button x:Name="btnGetAge" Click="btnGetAge_Click" Content="Get Age"/>
+        <Button x:Name="btnReset" Click="btnReset_Click" Content="Reset"/>
     </StackPanel>
 </Window>
