@@ -1,5 +1,5 @@
 /*Ethan Shipston
- * DATE
+ * 3/28/2019
  * Program which reads a text files info and is capable of updating said info.
  */
 using System;
@@ -31,26 +31,23 @@ namespace _184988Summative2
             InitializeComponent();
             contact.ReadFromFile();
 
-            txtInOut.Text = contact.firstName
-                + "\n" + contact.lastName
-                + "\n" + contact.dayBorn.ToString()
-                + "\n" + contact.monthBorn.ToString()
-                + "\n" + contact.yearBorn.ToString()
-                + "\n" + contact.email;
+            txtInOut.Text = contact.info[0]
+                + "\n" + contact.info[1]
+                + "\n" + contact.age.Day.ToString()
+                + "\n" + contact.age.Month.ToString()
+                + "\n" + contact.age.Year.ToString()
+                + "\n" + contact.info[2];
         }
 
+        /// <summary>
+        /// Calculates the age based on the date given, outputs as a message box
+        /// </summary>
         private void btnGetAge_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
             string temp = txtInOut.Text;
+            DateTime dt;
 
-            string f = temp.Substring(0, temp.IndexOf("\n"));
             temp = temp.Remove(0, temp.IndexOf("\n") + 1);
-            string l = temp.Substring(0, temp.IndexOf("\n"));
             temp = temp.Remove(0, temp.IndexOf("\n") + 1);
 
             int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int d);
@@ -60,18 +57,83 @@ namespace _184988Summative2
             int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int y);
             temp = temp.Remove(0, temp.IndexOf("\n") + 1);
 
-            string email = temp.Substring(0, temp.Length);
-
             try
             {
-                DateTime dt = new DateTime(y, m, d);
-                contact.WriteToFile(f, l, dt, email);
+                dt = new DateTime(y, m, d);
+                DateTime now = DateTime.Now;
+
+                if (now.Year < dt.Year)
+                {
+                    MessageBox.Show("Please use a valid year");
+                }
+                else if (now.DayOfYear < dt.DayOfYear)
+                {
+                    int age = now.Year - dt.Year - 1;
+                    MessageBox.Show(age.ToString());
+                }
+                else
+                {
+                    int age = now.Year - dt.Year;
+                    MessageBox.Show(age.ToString());
+                }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            
+        }
 
+        /// <summary>
+        /// Saves textbox data to contact.txt
+        /// </summary>
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            string temp = txtInOut.Text;
+            DateTime dt;
+            try
+            {
+                string f = temp.Substring(0, temp.IndexOf("\n"));
+                temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+                string l = temp.Substring(0, temp.IndexOf("\n"));
+                temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+
+                int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int d);
+                temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+                int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int m);
+                temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+                int.TryParse(temp.Substring(0, temp.IndexOf("\n")), out int y);
+                temp = temp.Remove(0, temp.IndexOf("\n") + 1);
+
+                string email = temp.Substring(0, temp.Length);
+
+                try
+                {
+                    dt = new DateTime(y, m, d);
+                    contact.SaveToFile(f, l, dt, email);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Resets textbox data if the user erased something.
+        /// </summary>
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            txtInOut.Text = contact.info[0]
+                + "\n" + contact.info[1]
+                + "\n" + contact.age.Day.ToString()
+                + "\n" + contact.age.Month.ToString()
+                + "\n" + contact.age.Year.ToString()
+                + "\n" + contact.info[2];
         }
     }
 }
