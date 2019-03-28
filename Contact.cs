@@ -10,12 +10,14 @@ namespace _184988Summative2
     class Contact
     {
         //Public Variables
-        public string firstName;
-        public string lastName;
-        public int yearBorn;
-        public int monthBorn;
-        public int dayBorn;
-        public string email;
+        string firstName;
+        string lastName;
+        int yearBorn;
+        int monthBorn;
+        int dayBorn;
+        string email;
+        public string[] info = new string[3];
+        public DateTime age;
 
         /// <summary>
         /// Method that reads contact.txt and outputs the info in a usable format.
@@ -44,6 +46,11 @@ namespace _184988Summative2
                 temp = temp.Remove(0, temp.IndexOf(",") + 1);
 
                 email = temp;
+
+                info[0] = firstName;
+                info[1] = lastName;
+                info[2] = email;
+                age = new DateTime(yearBorn, monthBorn, dayBorn);
             }
             catch (Exception ex)
             {
@@ -52,7 +59,14 @@ namespace _184988Summative2
             
         }
 
-        public void WriteToFile(string f, string l, DateTime date, string e)
+        /// <summary>
+        /// Logic for writing data to contact.txt
+        /// </summary>
+        /// <param name="f">First name</param>
+        /// <param name="l">Last name</param>
+        /// <param name="date">Birth date</param>
+        /// <param name="e">Email</param>
+        public void SaveToFile(string f, string l, DateTime date, string e)
         {
             string temp = date.Date.ToString();
             int.TryParse(temp.Substring(0, temp.IndexOf("/")), out int m);
