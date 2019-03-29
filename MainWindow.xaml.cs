@@ -107,20 +107,38 @@ namespace _184988Summative2
 
                 string email = temp.Substring(0, temp.Length);
 
-                try
+                if (f.Contains(",") || l.Contains(",") || email.Contains(","))
                 {
-                    dt = new DateTime(y, m, d);
-                    contact.SaveToFile(f, l, dt, email);
+                    MessageBoxResult mbr = MessageBox.Show("Your name/email may not contain commas.", "Warning", MessageBoxButton.OK);
+                    cancelClosing(e, mbr);
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message);
+                    try
+                    {
+                        dt = new DateTime(y, m, d);
+                        contact.SaveToFile(f, l, dt, email);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBoxResult mbr = MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK);
+                        cancelClosing(e, mbr);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Cancels closing.
+        /// </summary>
+        private static void cancelClosing(CancelEventArgs e, MessageBoxResult mbr)
+        {
+            if (mbr == MessageBoxResult.OK)
+                e.Cancel = true;
         }
 
         /// <summary>
